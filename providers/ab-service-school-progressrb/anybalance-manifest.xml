@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<provider>
+	<id version="1">ab-service-ekburg-school</id>
+	<name>Школьное питание</name>
+	<description html="true"><![CDATA[
+	<p>Предоставляет информацию о балансе провайдера "Процессинговый центр «ПРОГРЕСС+»"</p>
+	<p>Информация берется из личного кабинета <a href="http://progressrb.ru/">http://progressrb.ru/</a></p>
+	]]></description>
+	<author>Ainur Giniyatov &lt;anurique@gmail.com&gt;</author>
+	<files>
+		<preferences>preferences.xml</preferences>
+		<js>main.js</js>
+		<icon>icon.png</icon>
+	</files>
+	<counters>
+		<counter id="balance" name="Баланс" units=" р"/>
+		<counter id="account" name="Лицевой счёт" type="text"/>
+		<counter id="pupil" name="Ученик" type="text"/>
+	</counters>
+	<keywords></keywords>
+	<type>service</type>
+	<country>ru</country>
+</provider>
