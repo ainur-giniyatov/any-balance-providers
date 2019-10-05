@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <provider>
-	<id version="1">ab-service-ekburg-school</id>
+	<id version="7">ab-service-ekburg-school</id>
 	<name>Школьное питание</name>
 	<description html="true"><![CDATA[
 	<p>Предоставляет информацию о балансе провайдера "Процессинговый центр «ПРОГРЕСС+»"</p>
@@ -10,6 +10,7 @@
 	<files>
 		<preferences>preferences.xml</preferences>
 		<js>main.js</js>
+		<js>library.js</js>
 		<icon>icon.png</icon>
 	</files>
 	<counters>

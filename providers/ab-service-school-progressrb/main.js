@@ -12,39 +12,36 @@ var g_headers = {
 
 function main() {
 	var prefs = AnyBalance.getPreferences();
-	var baseurl = 'http://www.ekburg.ru/';
-	AnyBalance.setDefaultCharset('utf-8');
+	var baseurl = 'http://progressrb.ru/';
+	// AnyBalance.setDefaultCharset('utf-8');
 	
-	checkEmpty(prefs.login, 'Введите логин!');
-	checkEmpty(prefs.password, 'Введите пароль!');
+	// checkEmpty(prefs.login, 'Введите логин!');
+	// checkEmpty(prefs.password, 'Введите пароль!');
 	
-	var html = AnyBalance.requestGet(baseurl + 'school/', g_headers);
-	
+	var html = AnyBalance.requestGet(baseurl, g_headers);
+	AnyBalance.trace(html, null);
 	if(!html || AnyBalance.getLastStatusCode() > 400)
 		throw new AnyBalance.Error('Ошибка при подключении к сайту провайдера! Попробуйте обновить данные позже.');
 	
-	html = AnyBalance.requestPost(baseurl + '.out/aisPitanie/', {
+	html = AnyBalance.requestPost(baseurl, {
 		login: prefs.login,
 		password: prefs.password,
-		'rePath': '/.out/aisPitanie/'
-	}, addHeaders({Referer: baseurl + '.out/aisPitanie/'}));
-	
-	if (!/logout/i.test(html)) {
-		var error = getParam(html, null, null, /alert-error['"][^>]*>[\s\S]*?([\s\S]*?)<\//i, replaceTagsAndSpaces, html_entity_decode);
-		if (error)
-			throw new AnyBalance.Error(error, null, /Неверный логин или пароль/i.test(error));
-		
-		AnyBalance.trace(html);
-		throw new AnyBalance.Error('Не удалось зайти в личный кабинет. Сайт изменен?');
-	}
+		'log-in': 'Войти'
+	}, addHeaders({Referer: baseurl, 'Content-Type': 'application/x-www-form-urlencoded'}));
 	
 	var result = {success: true};
+
+	getParam(html, result, 'pupil', /<div class="name">(.*?)<\/div>/);
+	getParam(html, result, 'balance', /class="balance-cont">\D*(\d*)\D*<\/div>/);
+	getParam(html, result, 'account', /Л\/с: (.*?)<\/h2>/);
 	
-	getParam(html, result, 'balance', /Текущий баланс(?:[^>]*>){2}([\s\S]*?)<\//i, replaceTagsAndSpaces, parseBalance);
-	getParam(html, result, '__tariff', /Лицевой счёт №[\s]([0-9]+)/i, replaceTagsAndSpaces, html_entity_decode);
-	getParam(html, result, 'debt', /Допустимая задолжность:([\s\S]*?)<\//i, replaceTagsAndSpaces, parseBalance);
-	getParam(html, result, 'limit', /Буфет, лимит на день:([\s\S]*?)<\//i, replaceTagsAndSpaces, parseBalance);
-	getParam(html, result, 'pupil', /Ученик:([\s\S]*?)</i, replaceTagsAndSpaces, html_entity_decode);
+	// if (!/logout/i.test(html)) {
+	// 	var error = getParam(html, null, null, /alert-error['"][^>]*>[\s\S]*?([\s\S]*?)<\//i, replaceTagsAndSpaces, html_entity_decode);
+	// 	if (error)
+	// 		throw new AnyBalance.Error(error, null, /Неверный логин или пароль/i.test(error));
+		
+	// 	throw new AnyBalance.Error('Не удалось зайти в личный кабинет. Сайт изменен?');
+	// }
 	
 	AnyBalance.setResult(result);
 }
